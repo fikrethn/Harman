@@ -27,35 +27,42 @@ export function Navbar() {
     router.push("/login");
   }
 
+  if (isAuthPage) {
+    return (
+      <div className="auth-floating-actions">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          title={t("theme")}
+          className="grid size-9 place-items-center rounded-md border border-white/16 bg-stone-950/20 !text-white shadow-sm backdrop-blur-md transition hover:bg-white/16 hover:!text-white"
+        >
+          {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
+        <button
+          type="button"
+          onClick={() => setLocale(locale === "tr" ? "en" : "tr")}
+          title={t("language")}
+          className="inline-flex size-9 items-center justify-center gap-1 rounded-md border border-white/16 bg-stone-950/20 text-[11px] font-black !text-white shadow-sm backdrop-blur-md transition hover:bg-white/16 hover:!text-white"
+        >
+          <Languages size={15} />
+          {locale.toUpperCase()}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <header
-      className={cn(
-        "z-30",
-        isAuthPage
-          ? "pointer-events-none fixed right-3 top-3 z-50 w-max border-0 bg-transparent shadow-none"
-          : "sticky top-0 border-b border-emerald-950 bg-emerald-950/96 shadow-lg shadow-stone-950/15 backdrop-blur dark:border-stone-800 dark:bg-stone-950/95",
-      )}
+      className="sticky top-0 z-30 border-b border-emerald-950 bg-emerald-950/96 shadow-lg shadow-stone-950/15 backdrop-blur dark:border-stone-800 dark:bg-stone-950/95"
     >
-      <div
-        className={cn(
-          "flex items-center",
-          isAuthPage
-            ? "pointer-events-none justify-end gap-2 p-0"
-            : "mx-auto max-w-6xl justify-between px-3 py-1.5",
-        )}
-      >
-        {isAuthPage ? (
-          <span aria-hidden="true" />
-        ) : (
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-3 py-1.5">
           <Link href="/dashboard" className="flex items-center gap-2 text-base font-black !text-white dark:text-emerald-100">
             <span className="grid size-8 place-items-center rounded-md bg-emerald-500 text-emerald-950 shadow-sm dark:bg-emerald-500 dark:text-stone-950">
               <Sprout size={17} />
             </span>
             Harman
           </Link>
-        )}
 
-        {!isAuthPage ? (
           <nav className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
               <Link
@@ -71,25 +78,17 @@ export function Navbar() {
               </Link>
             ))}
           </nav>
-        ) : null}
 
-        <div className={cn("flex items-center gap-2", isAuthPage && "pointer-events-auto")}>
-          {!isAuthPage ? (
+        <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={signOut} className="hidden lg:inline-flex">
               <LogOut size={16} />
               {t("logout")}
             </Button>
-          ) : null}
           <button
             type="button"
             onClick={toggleTheme}
             title={t("theme")}
-            className={cn(
-              "grid size-8 place-items-center rounded-md shadow-sm transition",
-              isAuthPage
-                ? "border border-white/16 bg-white/10 !text-white backdrop-blur-md hover:bg-white/16 hover:!text-white"
-                : "border border-emerald-700 bg-emerald-900 !text-emerald-50 hover:bg-emerald-800 hover:!text-white dark:border-stone-700 dark:bg-stone-900 dark:text-stone-50 dark:hover:bg-stone-800",
-            )}
+            className="grid size-8 place-items-center rounded-md border border-emerald-700 bg-emerald-900 !text-emerald-50 shadow-sm transition hover:bg-emerald-800 hover:!text-white dark:border-stone-700 dark:bg-stone-900 dark:text-stone-50 dark:hover:bg-stone-800"
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
@@ -97,12 +96,7 @@ export function Navbar() {
             type="button"
             onClick={() => setLocale(locale === "tr" ? "en" : "tr")}
             title={t("language")}
-            className={cn(
-              "inline-flex size-8 items-center justify-center gap-1 rounded-md text-[11px] font-black shadow-sm transition",
-              isAuthPage
-                ? "border border-white/16 bg-white/10 !text-white backdrop-blur-md hover:bg-white/16 hover:!text-white"
-                : "border border-emerald-700 bg-emerald-900 !text-emerald-50 hover:bg-emerald-800 hover:!text-white dark:border-stone-700 dark:bg-stone-900 dark:text-stone-50 dark:hover:bg-stone-800",
-            )}
+            className="inline-flex size-8 items-center justify-center gap-1 rounded-md border border-emerald-700 bg-emerald-900 text-[11px] font-black !text-emerald-50 shadow-sm transition hover:bg-emerald-800 hover:!text-white dark:border-stone-700 dark:bg-stone-900 dark:text-stone-50 dark:hover:bg-stone-800"
           >
             <Languages size={14} />
             {locale.toUpperCase()}

@@ -2,12 +2,14 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Edit3, ExternalLink, MapPin, Plus, Sprout, Trash2 } from "lucide-react";
+import { CheckCircle2, Edit3, ExternalLink, MapPin, Plus, Sprout, Trash2, XCircle } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { Button } from "@/components/Button";
 import { FieldEditForm } from "@/components/FieldEditForm";
 import { OperationHistory } from "@/components/OperationHistory";
+import { PlanCard } from "@/components/PlanCard";
 import { useI18n } from "@/lib/i18n";
+import { planDetailLines } from "@/lib/plans";
 import { formatArea, formatDate, locationText } from "@/lib/utils";
 import { requireSupabase } from "@/lib/supabaseClient";
 import type { Field, FieldOperation, Plan } from "@/types/database";
@@ -84,6 +86,51 @@ function FieldDetail({ userId }: { userId: string }) {
     }
 
     router.push("/fields");
+  }
+
+  async function updatePlanStatus(plan: Plan, status: "completed" | "cancelled") {
+    if (!field) return;
+
+    setError("");
+    const supabase = requireSupabase();
+    const operationDate = new Date().toISOString().slice(0, 10);
+
+    if (status === "completed" && plan.plan_type) {
+      const { error: operationError } = await supabase.from("field_operations").insert({
+        user_id: userId,
+        field_id: field.id,
+        operation_type: plan.plan_type,
+        operation_date: operationDate,
+        material_name: plan.plan_type === "Ekim" ? plan.planned_crop : null,
+        notes: plan.notes ? `Plandan tamamlandı: ${plan.title}. ${plan.notes}` : `Plandan tamamlandı: ${plan.title}`,
+      });
+
+      if (operationError) {
+        setError(operationError.message);
+        return;
+      }
+
+      if (plan.plan_type === "Ekim" && plan.planned_crop) {
+        const { error: fieldError } = await supabase
+          .from("fields")
+          .update({ current_crop: plan.planned_crop, planting_date: operationDate })
+          .eq("user_id", userId)
+          .eq("id", field.id);
+
+        if (fieldError) {
+          setError(fieldError.message);
+          return;
+        }
+      }
+    }
+
+    const { error: updateError } = await supabase.from("plans").update({ status }).eq("id", plan.id).eq("user_id", userId);
+    if (updateError) {
+      setError(updateError.message);
+      return;
+    }
+
+    await load();
   }
 
   if (loading) return <main className="mx-auto max-w-6xl px-3 py-6">{t("loading")}</main>;
@@ -170,11 +217,30 @@ function FieldDetail({ userId }: { userId: string }) {
           <div className="mt-3 max-h-[420px] space-y-2 overflow-y-auto pr-1">
             {plans.length ? (
               plans.map((plan) => (
-                <div key={plan.id} className="rounded-lg bg-stone-50 p-2.5 dark:bg-stone-950">
-                  <p className="font-bold">{plan.title}</p>
-                  <p className="text-xs font-semibold text-stone-600 dark:text-stone-400">
-                    {formatDate(plan.planned_date)} - {plan.status}
-                  </p>
+                <div key={plan.id} className="rounded-lg border border-stone-200 bg-stone-50 p-2 dark:border-stone-700 dark:bg-stone-950">
+                  <PlanCard plan={plan} fieldName={field.name} />
+                  <details className="mt-2 rounded-md bg-white/70 px-2 py-1.5 text-xs text-stone-700 dark:bg-stone-900/70 dark:text-stone-300">
+                    <summary className="cursor-pointer font-black text-emerald-900 dark:text-emerald-200">
+                      {locale === "tr" ? "Plan detayları" : "Plan details"}
+                    </summary>
+                    <div className="mt-2 grid gap-1">
+                      {planDetailLines(plan, locale, field).map((line) => (
+                        <p key={line}>{line}</p>
+                      ))}
+                    </div>
+                  </details>
+                  {plan.status === "pending" ? (
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                      <Button variant="secondary" onClick={() => updatePlanStatus(plan, "completed")} className="min-h-8 text-xs">
+                        <CheckCircle2 size={14} />
+                        {locale === "tr" ? "Tamamla" : "Complete"}
+                      </Button>
+                      <Button variant="danger" onClick={() => updatePlanStatus(plan, "cancelled")} className="min-h-8 text-xs">
+                        <XCircle size={14} />
+                        {locale === "tr" ? "İptal et" : "Cancel"}
+                      </Button>
+                    </div>
+                  ) : null}
                 </div>
               ))
             ) : (

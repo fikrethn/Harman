@@ -45,7 +45,7 @@ const dictionary = {
     title: "Başlık",
     selectField: "Tarla seçin",
     completed: "Tamamlandı",
-    cancelled: "İptal",
+    cancelled: "İptal edildi",
     pending: "Bekliyor",
     fieldNotFound: "Tarla bulunamadı.",
     weatherUnavailable: "Hava durumu alınamadı.",

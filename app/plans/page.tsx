@@ -214,7 +214,7 @@ function Plans({ userId }: { userId: string }) {
         <div className="grid grid-cols-3 gap-2 sm:min-w-[330px]">
           <PlanMiniStat icon={<Clock3 size={14} />} label={locale === "tr" ? "Bekleyen" : "Pending"} value={pendingCount} tone="bg-amber-500" />
           <PlanMiniStat icon={<CheckCircle2 size={14} />} label={locale === "tr" ? "Tamam" : "Done"} value={completedCount} tone="bg-emerald-600" />
-          <PlanMiniStat icon={<XCircle size={14} />} label={locale === "tr" ? "İptal" : "Cancel"} value={cancelledCount} tone="bg-red-500" />
+          <PlanMiniStat icon={<XCircle size={14} />} label={locale === "tr" ? "İptal edildi" : "Cancelled"} value={cancelledCount} tone="bg-red-500" />
         </div>
       </div>
 
@@ -379,8 +379,9 @@ function Plans({ userId }: { userId: string }) {
                     <Button variant="secondary" onClick={() => updateStatus(plan, "completed")}>
                       {locale === "tr" ? "Yapıldı" : "Done"}
                     </Button>
-                    <Button variant="ghost" onClick={() => updateStatus(plan, "cancelled")}>
-                      {t("cancelled")}
+                    <Button variant="danger" onClick={() => updateStatus(plan, "cancelled")}>
+                      <XCircle size={15} />
+                      {locale === "tr" ? "İptal et" : "Cancel"}
                     </Button>
                   </div>
                 ) : null}

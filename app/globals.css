@@ -87,6 +87,17 @@ textarea {
   padding-bottom: max(1rem, env(safe-area-inset-bottom));
 }
 
+.auth-floating-actions {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: max(0.75rem, env(safe-area-inset-right));
+  z-index: 2147483646;
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .mobile-bottom-nav {
   display: block !important;
   position: fixed !important;
