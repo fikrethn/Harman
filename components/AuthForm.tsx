@@ -34,7 +34,10 @@ export function AuthForm({ mode, glass = false }: { mode: "login" | "register"; 
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: fullName } },
+          options: {
+            data: { full_name: fullName },
+            emailRedirectTo: `${window.location.origin}/login`,
+          },
         });
         if (error) throw error;
         if (data.session) {
@@ -66,6 +69,7 @@ export function AuthForm({ mode, glass = false }: { mode: "login" | "register"; 
       const { error } = await requireSupabase().auth.signInWithOtp({
         email: resetEmail,
         options: {
+          emailRedirectTo: `${window.location.origin}/dashboard`,
           shouldCreateUser: false,
         },
       });
