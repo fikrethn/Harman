@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+sifre.txt
 
 # debug
 npm-debug.log*

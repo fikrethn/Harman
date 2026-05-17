@@ -1,0 +1,16 @@
+{
+  "name": "Harman",
+  "short_name": "Harman",
+  "description": "Mobil uyumlu tarim takip uygulamasi",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#fafaf7",
+  "theme_color": "#047857",
+  "icons": [
+    {
+      "src": "/next.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

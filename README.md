@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Harman
 
-## Getting Started
+Mobil uyumlu Next.js, Supabase ve Open-Meteo tabanli tarim takip web uygulamasi.
 
-First, run the development server:
+## Calistirma
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Uygulama:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Supabase Ayarlari
 
-## Learn More
+`.env.local` dosyasinda `NEXT_PUBLIC_SUPABASE_URL` degerini kendi Supabase Project URL degerinizle degistirin:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://proje-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_or_anon_key
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`service_role` veya gizli anahtar client tarafinda kullanilmamalidir.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Veritabani
 
-## Deploy on Vercel
+Supabase Dashboard > SQL Editor icinde `supabase/schema.sql` dosyasinin tamamini calistirin.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Bu SQL:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `profiles`
+- `fields`
+- `field_operations`
+- `plans`
+- `weather_cache`
+
+tablolarini, triggerlari ve RLS politikalarini olusturur.
+
+## Sayfalar
+
+- `/` landing page
+- `/login`
+- `/register`
+- `/dashboard`
+- `/fields`
+- `/fields/new`
+- `/fields/[id]`
+- `/fields/[id]/operations/new`
+- `/plans`
+- `/weather`
+- `/settings`
+
+## Notlar
+
+- TKGM verisi cekilmez; detay sayfasindaki buton yalnizca `https://parselsorgu.tkgm.gov.tr/` adresini acar.
+- Hava durumu yorumlari oneridir, resmi veya kesin tarimsal garanti vermez.
+- Kullanici verileri Supabase RLS politikalariyla kullanici bazinda ayrilir.
+
+## Konum Secimi
+
+Tarla ekleme formu il, ilce ve mahalle/koy bilgisini serbest metin yerine uygulama API route'lari uzerinden getirir:
+
+- `/api/locations/cities`
+- `/api/locations/districts?cityCode=42`
+- `/api/locations/neighborhoods?districtCode=1262`
+
+Bu route'lar Beterali API'yi kullanir ve frontend'i dis servise dogrudan baglamaz.
+
+Mevcut veritabanina konum kolonlarini eklemek icin:
+
+```sql
+alter table public.fields
+  add column if not exists city_code text,
+  add column if not exists district_code text,
+  add column if not exists neighborhood_code text,
+  add column if not exists latitude numeric,
+  add column if not exists longitude numeric,
+  add column if not exists location_source text;
+```
+
+Hava durumu artik tarla adresinden degil, kullanicinin Ayarlar sayfasinda sectigi tek hava durumu adresinden hesaplanir.
+Mevcut veritabanina profil hava konumu kolonlarini eklemek icin `supabase/add-profile-weather-location.sql` dosyasini calistirin.

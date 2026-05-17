@@ -1,0 +1,40 @@
+export type WeatherSummary = {
+  fieldId?: string;
+  fieldName?: string;
+  locationName: string;
+  weatherCode: number | null;
+  isDay: boolean | null;
+  temperature: number | null;
+  apparentTemperature: number | null;
+  humidity: number | null;
+  windSpeed: number | null;
+  windGusts: number | null;
+  windDirection: number | null;
+  precipitationProbability: number | null;
+  precipitation: number | null;
+  cloudCover: number | null;
+  pressure: number | null;
+  uvIndex: number | null;
+  visibility: number | null;
+  soilTemperature: number | null;
+  soilMoisture: number | null;
+  minTemperature24h: number | null;
+  maxTemperature24h: number | null;
+  maxWind24h: number | null;
+  hourly: Array<{
+    time: string;
+    temperature: number | null;
+    precipitationProbability: number | null;
+    windSpeed: number | null;
+  }>;
+  daily: Array<{
+    date: string;
+    weatherCode: number | null;
+    minTemperature: number | null;
+    maxTemperature: number | null;
+    precipitationProbability: number | null;
+    precipitation: number | null;
+    maxWind: number | null;
+  }>;
+  messages: string[];
+};
