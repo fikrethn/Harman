@@ -26,18 +26,6 @@ html {
   min-height: 100%;
 }
 
-html.auth-page,
-body.auth-page {
-  height: 100%;
-  overflow: hidden !important;
-}
-
-html:has(.auth-landing),
-body:has(.auth-landing) {
-  height: 100%;
-  overflow: hidden !important;
-}
-
 @media (max-width: 640px) {
   html {
     font-size: 14.5px;
@@ -115,18 +103,26 @@ main {
 }
 
 .auth-landing {
-  height: 100vh;
-  height: 100dvh;
   min-height: 100vh;
   min-height: 100dvh;
   padding-bottom: 0 !important;
 }
 
-body.auth-page .auth-landing {
-  padding-bottom: 0 !important;
-}
-
 @media (min-width: 1024px) {
+  html.auth-page,
+  body.auth-page,
+  html:has(.auth-landing),
+  body:has(.auth-landing) {
+    height: 100%;
+    overflow: hidden !important;
+  }
+
+  .auth-landing {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
   .mobile-bottom-nav {
     display: none !important;
   }

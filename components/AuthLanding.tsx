@@ -22,12 +22,12 @@ export function AuthLanding({ initialMode = "login" }: { initialMode?: "login" |
   }, []);
 
   return (
-    <main className="auth-landing relative h-screen min-h-[620px] overflow-hidden bg-stone-950 text-white">
+    <main className="auth-landing relative min-h-dvh overflow-x-hidden bg-stone-950 text-white">
       <div className="absolute inset-0 bg-[url('/images/harman-field-hero.png')] bg-cover bg-center" />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,29,22,0.88)_0%,rgba(6,78,59,0.66)_34%,rgba(28,25,23,0.34)_58%,rgba(3,29,22,0.78)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(255,255,255,0.20),transparent_22%),linear-gradient(180deg,rgba(0,0,0,0.05),rgba(0,0,0,0.38))]" />
 
-      <section className="relative mx-auto grid h-full max-w-7xl content-center gap-8 px-5 py-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(420px,0.66fr)] lg:items-center xl:gap-14">
+      <section className="relative mx-auto grid min-h-dvh max-w-7xl content-center gap-8 px-5 py-20 lg:grid-cols-[minmax(0,0.94fr)_minmax(420px,0.66fr)] lg:items-center lg:py-10 xl:gap-14">
         <div className="max-w-2xl">
           <p className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-emerald-50 shadow-lg backdrop-blur-md">
             <Sprout size={13} />

@@ -30,13 +30,20 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "z-30 backdrop-blur",
+        "z-30",
         isAuthPage
-          ? "fixed inset-x-0 top-0 border-b border-transparent bg-transparent shadow-none"
-          : "sticky top-0 border-b border-emerald-950 bg-emerald-950/96 shadow-lg shadow-stone-950/15 dark:border-stone-800 dark:bg-stone-950/95",
+          ? "pointer-events-none fixed right-3 top-3 z-50 w-max border-0 bg-transparent shadow-none"
+          : "sticky top-0 border-b border-emerald-950 bg-emerald-950/96 shadow-lg shadow-stone-950/15 backdrop-blur dark:border-stone-800 dark:bg-stone-950/95",
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-3 py-1.5">
+      <div
+        className={cn(
+          "flex items-center",
+          isAuthPage
+            ? "pointer-events-none justify-end gap-2 p-0"
+            : "mx-auto max-w-6xl justify-between px-3 py-1.5",
+        )}
+      >
         {isAuthPage ? (
           <span aria-hidden="true" />
         ) : (
@@ -66,7 +73,7 @@ export function Navbar() {
           </nav>
         ) : null}
 
-        <div className="flex items-center gap-2">
+        <div className={cn("flex items-center gap-2", isAuthPage && "pointer-events-auto")}>
           {!isAuthPage ? (
             <Button variant="secondary" onClick={signOut} className="hidden lg:inline-flex">
               <LogOut size={16} />
